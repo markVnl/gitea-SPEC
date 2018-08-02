@@ -12,8 +12,8 @@ Type=simple
 User=gitea
 Group=gitea
 WorkingDirectory=/var/lib/gitea
-ExecStart=/usr/bin/gitea/gitea web --config /etc/gitea/app.ini
-Environment=USER=gitea HOME=/var/lib/gitea GITEA_WORK_DIR=/var/lib/gitea
+EnvironmentFile=-/etc/sysconfig/gitea
+ExecStart=/usr/bin/gitea web --config /etc/gitea/app.ini
 Restart=always
 RestartSec=2
 

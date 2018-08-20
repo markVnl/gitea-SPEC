@@ -1,6 +1,6 @@
 Name:		gitea
 Version:	1.4.3
-Release:	0.1%{?dist}
+Release:	0.2%{?dist}
 Summary:	Gitea is a painless self-hosted Git service.
 
 License:	MIT
@@ -49,7 +49,7 @@ install -m 660 %{SOURCE1}  %{buildroot}%{_sysconfdir}/%{name}/app.ini
 mkdir -p %{buildroot}/%{_unitdir}
 install -m 644 %{SOURCE2} %{buildroot}%{_unitdir}/%{name}.service
 mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
-install -m 0644 %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
+install -m 0664 %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 # Home & Log dir
 install -d -m 0755 %{buildroot}%{_sharedstatedir}/%{name}
 install -d -m 0660 %{buildroot}%{_localstatedir}/log/%{name}
@@ -81,11 +81,14 @@ getent passwd %{name} > /dev/null || \
 %{_bindir}/%{name}
 %{_unitdir}/%{name}.service
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
-%attr(0660,%{name},%{name}) %config(noreplace) %{_sysconfdir}/%{name}/app.ini
-%attr(0755,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
+%attr(0664,%{name},%{name}) %config(noreplace) %{_sysconfdir}/%{name}/app.ini
+%attr(0660,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
 %attr(0755,%{name},%{name}) %dir %{_sharedstatedir}/%{name}
 
 
 %changelog
+* Mon Aug 20 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.4.3-0.1
+- fix directory permissions
+- fix typo in gitea.service
 * Thu Aug 02 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.4.3-0.1
 - First Build

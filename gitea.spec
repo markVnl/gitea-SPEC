@@ -1,6 +1,6 @@
 Name:		gitea
 Version:	1.5.0
-Release:	0.2%{?dist}
+Release:	1%{?dist}
 Summary:	Gitea is a painless self-hosted Git service.
 
 License:	MIT
@@ -87,6 +87,8 @@ getent passwd %{name} > /dev/null || \
 
 
 %changelog
+* Wed Aug 22 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.0-1
+- bump to upsteam release 1.5.0
 * Mon Aug 20 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.4.3-0.1
 - fix directory permissions
 - fix typo in gitea.service

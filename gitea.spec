@@ -1,5 +1,5 @@
 Name:		gitea
-Version:	1.4.3
+Version:	1.5.0
 Release:	0.2%{?dist}
 Summary:	Gitea is a painless self-hosted Git service.
 

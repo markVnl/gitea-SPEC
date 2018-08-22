@@ -42,7 +42,7 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_bindir}
 install -m 755 src/code.gitea.io/gitea/gitea %{buildroot}%{_bindir}/%{name}
 mkdir -p %{buildroot}%{_datarootdir}/%{name}
-install -m 640 src/code.gitea.io/gitea/custom/conf/app.ini.sample \
+install -m 664 src/code.gitea.io/gitea/custom/conf/app.ini.sample \
 			%{buildroot}%{_datarootdir}/%{name}/app.ini.sample
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}
 install -m 660 %{SOURCE1}  %{buildroot}%{_sysconfdir}/%{name}/app.ini
@@ -52,7 +52,7 @@ mkdir -p %{buildroot}%{_sysconfdir}/sysconfig
 install -m 0664 %{SOURCE3} %{buildroot}%{_sysconfdir}/sysconfig/%{name}
 # Home & Log dir
 install -d -m 0755 %{buildroot}%{_sharedstatedir}/%{name}
-install -d -m 0660 %{buildroot}%{_localstatedir}/log/%{name}
+install -d -m 0755 %{buildroot}%{_localstatedir}/log/%{name}
 
 %clean
 rm -rf %{buildroot}
@@ -82,7 +82,7 @@ getent passwd %{name} > /dev/null || \
 %{_unitdir}/%{name}.service
 %config(noreplace) %{_sysconfdir}/sysconfig/%{name}
 %attr(0664,%{name},%{name}) %config(noreplace) %{_sysconfdir}/%{name}/app.ini
-%attr(0660,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
+%attr(0755,%{name},%{name}) %dir %{_localstatedir}/log/%{name}
 %attr(0755,%{name},%{name}) %dir %{_sharedstatedir}/%{name}
 
 

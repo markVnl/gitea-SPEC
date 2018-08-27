@@ -1,6 +1,9 @@
+# Do not try to package empty debug_package
+%global debug_package %{nil}
+
 Name:		gitea
 Version:	1.5.0
-Release:	1%{?dist}
+Release:	2%{?dist}
 Summary:	Gitea is a painless self-hosted Git service.
 
 License:	MIT

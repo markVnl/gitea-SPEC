@@ -90,7 +90,7 @@ getent passwd %{name} > /dev/null || \
 
 
 %changelog
-* Mon Aog 27 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.0-2
+* Mon Aug 27 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.0-2
 - do not package empty debug info
 * Wed Aug 22 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.0-1
 - bump to upsteam release 1.5.0

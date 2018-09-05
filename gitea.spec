@@ -2,7 +2,7 @@
 %global debug_package %{nil}
 
 Name:		gitea
-Version:	1.5.0
+Version:	1.5.1
 Release:	2%{?dist}
 Summary:	Gitea is a painless self-hosted Git service.
 
@@ -90,6 +90,8 @@ getent passwd %{name} > /dev/null || \
 
 
 %changelog
+* Mon Sep 03 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.1-1
+- bump to upsteam release 1.5.1
 * Mon Aug 27 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.0-2
 - do not package empty debug info
 * Wed Aug 22 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.0-1

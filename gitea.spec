@@ -2,8 +2,9 @@
 %global debug_package %{nil}
 
 Name:		gitea
-Version:	1.5.1
-Release:	2%{?dist}
+# TODO: enable network during build for =>1.9.0 || go get them before build..
+Version:	1.8.3
+Release:	1%{?dist}
 Summary:	Gitea is a painless self-hosted Git service.
 
 License:	MIT
@@ -90,6 +91,8 @@ getent passwd %{name} > /dev/null || \
 
 
 %changelog
+* Fri Sep 13 2019 Mark Verlinde <mark.verlinde@gmail.com> 1.8.3-1
+- bump to upsteam release 1.8.3
 * Mon Sep 03 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.1-1
 - bump to upsteam release 1.5.1
 * Mon Aug 27 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.0-2

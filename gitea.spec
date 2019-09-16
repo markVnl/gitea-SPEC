@@ -2,9 +2,8 @@
 %global debug_package %{nil}
 
 Name:		gitea
-# TODO: enable network during build for =>1.9.0 || go get them before build..
-Version:	1.8.3
-Release:	1%{?dist}
+Version:	1.9.3
+Release:	0.1%{?dist}
 Summary:	Gitea is a painless self-hosted Git service.
 
 License:	MIT
@@ -15,7 +14,6 @@ Source2:	gitea.service
 Source3:	gitea.conf
 
 BuildRequires:	golang >= 1.8
-BuildRequires:	go-bindata
 BuildRequires:	pam-devel
 
 Requires:	git
@@ -28,25 +26,46 @@ Gitea is a painless self-hosted Git service
 
 %build
 export GOPATH=$(pwd)
-mkdir -p src/code.gitea.io/
-mv  %{name}-%{version} src/code.gitea.io/gitea
-pushd src/code.gitea.io/gitea
-# Fix version without git
-sed -i 's/\(LDFLAGS\ :=\ -X\ "main.Version=\)\(.*\)/\1%{version}"\ -X\ "main.Tags=\$\(TAGS\)"/' Makefile
-#export TAGS="sqlite bindata pam"
-export TAGS="bindata pam"
-make generate build
+
+pushd %{name}-%{version}
+
+# workaround for broken build in chroot without network
+# do not use 'go generate' in Makefile; create bindata for assets manually
+for i in options public templates; do
+   pushd modules/$i
+   go run -mod=vendor main.go
+   popd
+done
+
+# make version is not applicable
+# put something meaningfull in like rpm version
+%define make_version %(rpmbuild --version)
+
+# build tags
+#%%define tags bindata sqlite sqlite_unlock_notify pam
+%define tags bindata pam
+
+# go build
+GO111MODULE=on go build -mod=vendor -v \
+  -tags '%{tags}' \
+  -ldflags '-s -w -X "main.MakeVersion=%{make_version}" -X "main.Version=%{version}" -X "main.Tags=%{tags}"'
+
+# TODO: some (extra) ldfags ( https://docs.gitea.io/en-us/install-from-source/)
+# - To set the CustomPath use LDFLAGS="-X \"code.gitea.io/gitea/modules/setting.CustomPath=custom-path\""
+# - For CustomConf you should use -X \"code.gitea.io/gitea/modules/setting.CustomConf=conf.ini\"
+# - For AppWorkDir you should use -X \"code.gitea.io/gitea/modules/setting.AppWorkDir=working-directory\"
+
 popd
 
 %install
 # prepare docs
-cp src/code.gitea.io/gitea/LICENSE .
+mv %{name}-%{version}/LICENSE .
 
 rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_bindir}
-install -m 755 src/code.gitea.io/gitea/gitea %{buildroot}%{_bindir}/%{name}
+install -m 755 %{name}-%{version}/gitea %{buildroot}%{_bindir}/%{name}
 mkdir -p %{buildroot}%{_datarootdir}/%{name}
-install -m 664 src/code.gitea.io/gitea/custom/conf/app.ini.sample \
+install -m 664 %{name}-%{version}/custom/conf/app.ini.sample \
 			%{buildroot}%{_datarootdir}/%{name}/app.ini.sample
 mkdir -p %{buildroot}%{_sysconfdir}/%{name}
 install -m 660 %{SOURCE1}  %{buildroot}%{_sysconfdir}/%{name}/app.ini
@@ -91,6 +110,10 @@ getent passwd %{name} > /dev/null || \
 
 
 %changelog
+* Mon Sep 16 2019 Mark Verlinde <mark.verlinde@gmail.com> 1.9.3-0.1
+- initial build of 1.9 branch
+- new build strategy: do not use Makefile
+- workaround for generating bindata for assets in build chroot without network
 * Fri Sep 13 2019 Mark Verlinde <mark.verlinde@gmail.com> 1.8.3-1
 - bump to upsteam release 1.8.3
 * Mon Sep 03 2018 Mark Verlinde <mark.verlinde@gmail.com> 1.5.1-1

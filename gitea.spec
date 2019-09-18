@@ -3,7 +3,7 @@
 
 Name:		gitea
 Version:	1.9.3
-Release:	0.1%{?dist}
+Release:	0.2%{?dist}
 Summary:	Gitea is a painless self-hosted Git service.
 
 License:	MIT
@@ -15,6 +15,7 @@ Source3:	gitea.conf
 
 BuildRequires:	golang >= 1.8
 BuildRequires:	pam-devel
+BuildRequires: systemd
 
 Requires:	git
 
@@ -110,6 +111,8 @@ getent passwd %{name} > /dev/null || \
 
 
 %changelog
+* Wed Sep 18 2019 Mark Verlinde <mark.verlinde@gmail.com> 1.9.3-0.2
+- fix fedaora build
 * Mon Sep 16 2019 Mark Verlinde <mark.verlinde@gmail.com> 1.9.3-0.1
 - initial build of 1.9 branch
 - new build strategy: do not use Makefile
